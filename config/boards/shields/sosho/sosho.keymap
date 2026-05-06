@@ -1,4 +1,7 @@
-// スクロール量の調整 (デフォルト150)
+/*
+ * TH-601 (sosho) Keymap
+ */
+
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 150
 
 #include <behaviors.dtsi>
@@ -8,8 +11,8 @@
 #include <dt-bindings/zmk/outputs.h>
 
 / {
+    /* 1. ビヘイビアの設定（エンコーダーなど） */
     behaviors {
-        // 最新のZMK仕様に合わせたスクロール設定
         // 左手側：右回しで「上」、左回しで「下」
         msc_ec_l: sensor_rotation_scroll_L {
             compatible = "zmk,behavior-sensor-rotate";
@@ -26,38 +29,39 @@
         };
     };
 
-    // スクロールの感度調整（加速なし設定）
+    /* 2. マウススクロールの感度（加速なし） */
     &msc {
         time-to-max-speed-ms = <0>;
         acceleration-exponent = <0>;
     };
 
+    /* 3. コンボ設定 */
     combos {
         compatible = "zmk,combos";
         prioritize-longer-keys;
 
-        // 左クリックのコンボ: J(19) + K(20)
+        // 左クリック: J + K
         combo_LCLK {
             timeout-ms = <50>;
             key-positions = <19 20>;
             bindings = <&mkp LCLK>;
         };
 
-        // 右クリックのコンボ: K(20) + L(21)
+        // 右クリック: K + L
         combo_RCLK {
             timeout-ms = <50>;
             key-positions = <20 21>;
             bindings = <&mkp RCLK>;
         };
 
-        // ホイールクリックのコンボ: J(19) + L(21)
+        // ホイールクリック: J + L
         combo_MCLK {
             timeout-ms = <90>;
             key-positions = <19 21>;
             bindings = <&mkp MCLK>;
         };
 
-        // スクロールレイヤー切り替えコンボ: M(31) + ,(32)
+        // スクロールレイヤー(予備): M + ,
         combo_SCROLL {
             timeout-ms = <50>;
             key-positions = <31 32>;
@@ -65,23 +69,21 @@
         };
     };
 
+    /* 4. キーマップ本体 */
     keymap {
         compatible = "zmk,keymap";
 
         default_layer {
-            // Layer 0: 元のレイアウトを完全再現
             bindings = <
 &kp TAB    &kp Q   &kp W  &kp E  &kp R  &kp T      &kp Y  &kp U  &kp I      &kp O    &kp P     &kp BSPC
 &kp LCTRL  &kp A   &kp S  &kp D  &kp F  &kp G      &kp H  &kp J  &kp K      &kp L    &kp SQT   &kp ENTER
 &kp LSHFT  &kp Z   &kp X  &kp C  &kp V  &kp B      &kp N  &kp M  &kp COMMA  &kp DOT  &kp SLASH &kp LSHFT
 &kp ESC    &kp LALT              &mo 2  &kp SPACE  &mo 1  &kp LA(GRAVE)              &mo 3     &kp LGUI
             >;
-            // エンコーダー設定
             sensor-bindings = <&msc_ec_l &msc_ec_r>;
         };
 
         layer_1 {
-            // Layer 1: 記号・数字・矢印
             bindings = <
 &kp GRAVE &kp N1  &kp N2  &kp N3  &kp N4  &kp N5       &kp N6    &kp N7   &kp N8   &kp N9    &kp N0 &kp DEL
 &trans    &trans  &trans  &trans  &trans  &trans       &kp PG_UP &kp HOME &kp UP   &kp END   &trans &trans
@@ -91,7 +93,6 @@
         };
 
         layer_2 {
-            // Layer 2: Fキー・記号
             bindings = <
 &trans &kp F1  &kp F2  &kp F3  &kp F4  &kp F5     &trans  &trans    &kp MINUS &kp EQUAL &trans     &trans
 &trans &kp F6  &kp F7  &kp F8  &kp F9  &kp F10    &trans  &kp LBKT  &kp RBKT  &kp NUBS  &trans     &trans
@@ -101,7 +102,6 @@
         };
 
         layer_3 {
-            // Layer 3: Bluetooth・システム
             bindings = <
 &trans &trans &trans &trans &trans &trans      &trans  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3   &bt BT_SEL 4
 &trans &trans &trans &trans &trans &trans      &trans  &trans        &trans        &trans        &trans         &trans
@@ -110,12 +110,7 @@
             >;
         };
 
-        scroll {
-            status = "reserved";
-        };
-
-        extra2 {
-            status = "reserved";
-        };
+        scroll { status = "reserved"; };
+        extra2 { status = "reserved"; };
     };
 };
