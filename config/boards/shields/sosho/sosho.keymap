@@ -1,8 +1,6 @@
 /*
- * TH-601 (sosho) Keymap
+ * TH-601 (sosho) Keymap - Updated for ZMK 2026/Zephyr 4.1
  */
-
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 150
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
@@ -10,17 +8,25 @@
 #include <dt-bindings/zmk/pointing.h>
 #include <dt-bindings/zmk/outputs.h>
 
+// スクロール量の調整
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 150
+
+/* 1. マウススクロールの感度（加速なし）の設定 */
+/* これはルートノード / { } の「外」に記述します */
+&msc {
+    time-to-max-speed-ms = <0>;
+    acceleration-exponent = <0>;
+};
+
 / {
-    /* 1. ビヘイビアの設定（エンコーダーなど） */
+    /* 2. ビヘイビアの設定 */
     behaviors {
-        // 左手側：右回しで「上」、左回しで「下」
         msc_ec_l: sensor_rotation_scroll_L {
             compatible = "zmk,behavior-sensor-rotate";
             #sensor-binding-cells = <0>;
             bindings = <&msc SCRL_UP>, <&msc SCRL_DOWN>;
             tap-ms = <20>;
         };
-        // 右手側：右回しで「右」、左回しで「左」
         msc_ec_r: sensor_rotation_scroll_R {
             compatible = "zmk,behavior-sensor-rotate";
             #sensor-binding-cells = <0>;
@@ -29,39 +35,29 @@
         };
     };
 
-    /* 2. マウススクロールの感度（加速なし） */
-    &msc {
-        time-to-max-speed-ms = <0>;
-        acceleration-exponent = <0>;
-    };
-
     /* 3. コンボ設定 */
     combos {
         compatible = "zmk,combos";
         prioritize-longer-keys;
 
-        // 左クリック: J + K
         combo_LCLK {
             timeout-ms = <50>;
             key-positions = <19 20>;
             bindings = <&mkp LCLK>;
         };
 
-        // 右クリック: K + L
         combo_RCLK {
             timeout-ms = <50>;
             key-positions = <20 21>;
             bindings = <&mkp RCLK>;
         };
 
-        // ホイールクリック: J + L
         combo_MCLK {
             timeout-ms = <90>;
             key-positions = <19 21>;
             bindings = <&mkp MCLK>;
         };
 
-        // スクロールレイヤー(予備): M + ,
         combo_SCROLL {
             timeout-ms = <50>;
             key-positions = <31 32>;
