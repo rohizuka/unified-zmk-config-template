@@ -7,15 +7,15 @@
     transform = <&default_transform>;
 };
 
-&uart0 { status = "disabled"; };
+/*&uart0 { status = "disabled"; };*/
 &i2c0  { status = "disabled"; };
 &i2c1  { status = "disabled"; };
 
 / {
 	/* キー入力に関する設定 */
     chosen {
-        zmk,kscan = &kscan0;
-        zmk,physical-layout = &physical_layout0;
+        zmk,kscan = <&kscan0>;
+        zmk,physical-layout = <&physical_layout0>;
     };
 
     default_transform: keymap_transform_0 {
@@ -47,7 +47,8 @@
         compatible = "alps,ec11";
         a-gpios = <&gpio0 5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         b-gpios = <&gpio1 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        steps = <48>;
+        steps = <96>;
+        resolution = <4>;
         status = "disabled";
     };
 
@@ -55,7 +56,8 @@
         compatible = "alps,ec11";
         a-gpios = <&gpio0 5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         b-gpios = <&gpio1 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        steps = <48>;
+        steps = <96>;
+        resolution = <4>;
         status = "disabled";
     };
 
@@ -73,13 +75,13 @@
         glidepoint_split: glidepoint_split@0 {
             compatible = "zmk,input-split";
             reg = <0>;
-			status = "disabled";
+            status = "disabled";
         };
 
         trackball_split: trackball_split@1 {
             compatible = "zmk,input-split";
             reg = <1>;
-			status = "disabled";
+            status = "disabled";
         };
     };
 
@@ -87,7 +89,7 @@
     glidepoint_split_listener: glidepoint_split_listener {
         compatible = "zmk,input-listener";
         status = "disabled";
-		device = <&glidepoint_split>;
+        device = <&glidepoint_split>;
     };
 
     glidepoint_listener: glidepoint_listener {
@@ -105,14 +107,14 @@
     trackball_split_listener: trackball_split_listener {
         compatible = "zmk,input-listener";
         status = "disabled";
-		device = <&trackball_split>;
+        device = <&trackball_split>;
     };
 
 	/* zmk-rgbled-widgetのおまじない */
     aliases {
-        led-red = &led0;
-        led-green = &led1;
-        led-blue = &led2;
+        led-red = <&led0>;
+        led-green = <&led1>;
+        led-blue = <&led2>;
     };
 
     leds {
@@ -155,7 +157,6 @@
     };
 };
 
-
 /* トラックパッドの配線設定 */
 &spi0 {
     status = "disabled";
@@ -170,28 +171,29 @@
         reg = <0>;
         spi-max-frequency = <500000>;
         data-ready-gpios = <&gpio1 7 (GPIO_ACTIVE_HIGH)>;
-        /* Setting a higher sensitivity causes issues on bluetooth */
         sensitivity = "1x";
     };
 };
 
 /* トラックボールの配線設定 */
+#include <zephyr/dt-bindings/input/input-event-codes.h>
 &spi1 {
     status = "disabled";
     compatible = "nordic,nrf-spim";
     pinctrl-0 = <&spi1_default>;
     pinctrl-1 = <&spi1_sleep>;
     pinctrl-names = "default", "sleep";
-    cs-gpios = <&gpio1 3 GPIO_ACTIVE_LOW>; // nCS
+    cs-gpios = <&gpio1 3 GPIO_ACTIVE_LOW>;
 
     trackball: trackball@0 {
         status = "disabled";
-        compatible = "pixart,pmw3610";
+        compatible = "pixart,pmw3610-alt";
         reg = <0>;
-        spi-max-frequency = <20000000>;
-        motion-gpios = <&gpio1 7 (GPIO_ACTIVE_HIGH)>;      // Sample-LOW PRODUCT-HIGH
-        res-cpi = <600>;
-        zephyr,axis-x = <INPUT_REL_X>;
-        zephyr,axis-y = <INPUT_REL_Y>;
+        spi-max-frequency = <2000000>;
+        irq-gpios = <&gpio1 7 (GPIO_ACTIVE_HIGH)>;
+        cpi = <600>;
+        evt-type = <INPUT_EV_REL>;
+        x-input-code = <INPUT_REL_Y>;
+        y-input-code = <INPUT_REL_X>;
     };
 };
