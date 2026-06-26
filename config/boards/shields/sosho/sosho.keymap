@@ -1,5 +1,5 @@
 /*
- * TH-601 (sosho) Keymap - Final Version
+ * TH-601 (sosho) Keymap - Encoder Test
  */
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
@@ -48,7 +48,7 @@
 &kp LCTRL  &kp Z      &kp X      &kp C      &kp V      &kp B           &kp N      &kp M      &kp COMMA  &kp DOT    &kp FSLH      &kp RSHFT
 &kp LALT   &kp LGUI   &mo 2      &kp SPACE                                        &kp RET    &mo 1      &kp RCTRL  &tog 3
             >;
-            sensor-bindings = <&msc_ec_l &msc_ec_r>;
+            sensor-bindings = <&ec_r_ps &ec_r_ps>;
         };
         layer_1 {
             // Layer 1 (記号・数字・矢印)
@@ -58,7 +58,7 @@
 &trans     &trans     &trans     &trans     &trans     &trans          &trans     &trans     &trans     &trans     &trans        &trans
 &trans     &trans     &trans     &trans                                           &trans     &trans     &trans     &trans
             >;
-            sensor-bindings = <&msc_ec_l &msc_ec_r>;
+            sensor-bindings = <&ec_r_ps &ec_r_ps>;
         };
         layer_2 {
             // Layer 2 (ファンクションキー・テンキー)
@@ -68,7 +68,7 @@
 &trans     &kp F11    &kp F12    &kp F13    &kp F14    &kp F15         &kp KP_N1  &kp KP_N2  &kp KP_N3  &trans     &trans        &trans
 &trans     &trans     &trans     &trans                                           &trans     &trans     &trans     &trans
             >;
-            sensor-bindings = <&msc_ec_l &msc_ec_r>;
+            sensor-bindings = <&ec_r_ps &ec_r_ps>;
         };
         layer_3 {
             // Layer 3 (Bluetooth・マクロ)
@@ -78,7 +78,7 @@
 &trans     &trans     &trans     &trans     &trans     &trans          &kp KP_PLUS    &kp LC(MINUS)&kp R        &kp P        &kp B        &trans
 &trans     &trans     &trans     &trans                                               &kp SPACE    &kp LALT     &trans       &trans
             >;
-            sensor-bindings = <&msc_ec_l &ec_r_ps>;
+            sensor-bindings = <&ec_r_ps &ec_r_ps>;
         };
     };
 };
